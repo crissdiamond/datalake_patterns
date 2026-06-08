@@ -69,6 +69,13 @@ Database Table to Bronze
 
 without needing to design every notebook, workspace, pipeline, service principal, metadata table or deployment step manually.
 
+**Be honest about where the framework gives leverage.** Two distinct levels of help exist, and each pattern must declare which it provides (see *Leverage type* in `03_pattern_template.md`):
+
+- **Reusable asset** — the SA *configures* a centrally managed building block; little or no bespoke engineering. This is realistic for most Ingestion, Governance and Operational patterns.
+- **Guided design** — the framework supplies guardrails, decision questions and reference implementations, but genuine design judgement remains. This is the honest position for most Data Product (modelling) patterns and some Transformation patterns: a star schema or domain conformance cannot be fully templatised. The framework keeps these *safe*, not *automatic*.
+
+Overstating the modelling layer as turnkey would set the wrong expectation with both architects and delivery partners.
+
 ### 3.3 Centrally managed implementation assets
 
 The low-level implementation should be standardised through centrally managed assets, such as:
@@ -102,6 +109,12 @@ Governance must not be an afterthought. Each pattern must define:
 - operational ownership;
 - support model;
 - assurance checkpoints.
+
+**Embedded must mean enforced, not just documented.** In a federated model, any control that is merely "expected" will drift. Where possible, governance controls are enforced as gates — e.g. an asset without owner, steward and classification cannot be promoted to production. The enforcement model (policy-as-code and deployment gates) is defined in `06_cross_cutting_concerns.md`.
+
+### 3.6 Known foundational dependency: the Enterprise/Domain Data Model
+
+Several Transformation and Data Product patterns (notably B2 Silver Conformance) depend on a mature Enterprise/Domain Data Model to conform to. The Integration approach had an established EDM; the Data Lake side must not assume one exists. Where the domain model is immature or absent, this is a critical dependency to resolve before those patterns can be completed — it is tracked as a framework-level risk in `08_operating_model.md`.
 
 ## 4. Pattern catalogue structure
 

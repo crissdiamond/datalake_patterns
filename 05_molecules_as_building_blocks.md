@@ -75,70 +75,89 @@ Publish Semantic Model
 Register Data Product
 ```
 
-## 3. Draft molecule categories
+## 3. Molecule identification scheme
+
+Patterns have IDs (`A1`, `C2`); molecules must too, or they become unmanageable as they multiply. Every molecule gets a stable ID and name, referenced from each pattern's section 8.
+
+Format: `GROUP[-SUBGROUP]-NN`
+
+| Prefix | Molecule family |
+|---|---|
+| `ING-C-NN` | Client-side ingestion (source systems & agents) |
+| `ING-A-NN` | API-side ingestion (the Ingestion Gateway) |
+| `TRN-NN`   | Transformation |
+| `DP-NN`    | Data product |
+| `GOV-NN`   | Governance |
+| `OPS-NN`   | Operational |
+
+Rules:
+- An ID is permanent once approved; deprecate, never reassign.
+- A molecule is defined once and reused across patterns — do not fork per pattern.
+- Each molecule carries the same lifecycle status as patterns (Draft | Proposed | Approved | Deprecated).
+
+## 4. Draft molecule categories
 
 Molecules should be grouped underneath the pattern catalogue, for example:
 
-### Client-Side Ingestion Molecules (Source systems & agents)
+### Client-Side Ingestion Molecules (`ING-C-NN` — source systems & agents)
 
-- Read source file
-- Extract source database table
-- Pull from source API
-- Batch source records
-- Authenticate with Ingestion API
-- HTTP POST payload to Ingestion API
+- `ING-C-01` Read source file
+- `ING-C-02` Extract source database table
+- `ING-C-03` Pull from source API
+- `ING-C-04` Authenticate with Ingestion API
+- `ING-C-05` Batch source records and POST (or request signed URL)
 
-### API-Side Ingestion Molecules (Ingestion Gateway)
+### API-Side Ingestion Molecules (`ING-A-NN` — Ingestion Gateway)
 
-- Authorize API client request
-- Retrieve active schema contract from Registry
-- Validate payload schema
-- Virus/malware scan payload
-- Write payload stream to Bronze folder
-- Log gateway audit telemetry
-- Quarantine rejected payload
-- Route event payload to stream processor
+- `ING-A-01` Authorize API client request
+- `ING-A-02` Validate payload schema against Registry
+- `ING-A-03` Virus/malware scan payload
+- `ING-A-04` Write payload stream to Bronze folder
+- `ING-A-05` Log gateway audit telemetry
+- `ING-A-06` Quarantine rejected payload
+- `ING-A-07` Send ingestion failure alert
+- `ING-A-08` Route event payload to stream processor
 
-### Transformation molecules
+### Transformation molecules (`TRN-NN`)
 
-- Standardise column names
-- Convert data types
-- Apply mapping rules
-- Apply data quality rule
-- Quarantine failed record
-- Deduplicate records
-- Enrich with reference data
-- Apply SCD logic
+- `TRN-01` Standardise column names
+- `TRN-02` Convert data types
+- `TRN-03` Apply mapping rules
+- `TRN-04` Apply data quality rule
+- `TRN-05` Quarantine failed record
+- `TRN-06` Deduplicate records
+- `TRN-07` Enrich with reference data
+- `TRN-08` Apply SCD logic
 
-### Data product molecules
+### Data product molecules (`DP-NN`)
 
-- Create curated Silver table
-- Create fact table
-- Create dimension table
-- Create flattened Gold table
-- Create semantic model
-- Publish extract
+- `DP-01` Create curated Silver table
+- `DP-02` Create fact table
+- `DP-03` Create dimension table
+- `DP-04` Create flattened Gold table
+- `DP-05` Create semantic model
+- `DP-06` Publish extract
 
-### Governance molecules
+### Governance molecules (`GOV-NN`)
 
-- Register asset in Purview
-- Link glossary term
-- Assign owner/steward
-- Apply classification
-- Capture lineage
-- Log data quality issue
+- `GOV-01` Register asset in Purview
+- `GOV-02` Link glossary term
+- `GOV-03` Assign owner/steward
+- `GOV-04` Apply classification
+- `GOV-05` Capture lineage
+- `GOV-06` Log data quality issue
 
-### Operational molecules
+### Operational molecules (`OPS-NN`)
 
-- Log run
-- Reconcile row counts
-- Retry failed step
-- Reprocess batch
-- Track freshness
-- Promote between environments
-- Monitor capacity
+- `OPS-01` Log run
+- `OPS-02` Reconcile row counts
+- `OPS-03` Retry failed step
+- `OPS-04` Reprocess batch
+- `OPS-05` Track freshness / raise alert
+- `OPS-06` Promote between environments
+- `OPS-07` Monitor capacity
 
-## 4. Implementation expectation
+## 5. Implementation expectation
 
 Designers and developers should not start by producing a large molecule catalogue in isolation.
 
@@ -154,7 +173,7 @@ For each selected molecule, the framework should define:
 - governance and operational controls;
 - acceptance criteria.
 
-## 5. Key distinction
+## 6. Key distinction
 
 - **Pattern** = reusable architecture solution for a common end-to-end need.
 - **Molecule** = reusable implementation/design unit used inside one or more patterns.

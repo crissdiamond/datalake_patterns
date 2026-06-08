@@ -26,17 +26,33 @@ The objective is to reproduce the successful Integration approach in the Data La
 
 ## Documents
 
+**Framework core**
+
 1. `01_model_and_principles.md`  
-   Defines the overall Data Lake pattern model and how it maps from Integration.
+   The overall Data Lake pattern model, how it maps from Integration, and the design principles (including honest leverage types and the EDM dependency).
 
 2. `02_pattern_catalogue.md`  
-   Main document: the proposed pattern catalogue grouped into Ingestion, Transformation, Data Product, Governance and Operational patterns.
+   Main document: the pattern catalogue (index + scope) grouped into Ingestion, Transformation, Data Product, Governance and Operational patterns, with the Standardized Ingestion Gateway, ingestion modes and Schema Registry.
 
 3. `03_pattern_template.md`  
-   Standard template each pattern should follow.
+   The single canonical template every completed pattern must follow.
 
 4. `04_example_patterns.md`  
-   Worked examples showing how selected patterns should be described.
+   Five fully worked examples (one per group) following the template — the quality bar.
 
 5. `05_molecules_as_building_blocks.md`  
-   Explains how molecules sit below patterns as reusable implementation units.
+   How molecules sit below patterns as reusable implementation units, with the molecule ID scheme.
+
+**Enabling documents**
+
+6. `06_cross_cutting_concerns.md`  
+   Concerns that recur in every pattern: the Ingestion gateway (control vs data plane) and modes, the Schema Registry, security/identity, environments, capacity, the Fabric-native-first stance, and governance enforcement.
+
+7. `07_pattern_selection_guide.md`  
+   A decision map helping Solution Architects choose and compose patterns.
+
+8. `08_operating_model.md`  
+   How the framework itself is run: RACI, pattern lifecycle, federation/contribution model, the EDM dependency, and success metrics.
+
+9. `09_supplier_engagement_brief.md`  
+   The brief for external partners: scope, priorities, deliverable definition, definition-of-done and engagement model.
