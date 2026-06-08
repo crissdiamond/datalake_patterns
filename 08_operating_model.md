@@ -6,7 +6,7 @@ The Integration approach worked because a central team *ran* it — owning the s
 
 ## 1. Roles and RACI (the framework, not individual data products)
 
-| Activity | Data Architecture | Data Platform | Data Governance | Federated team | Design forum |
+| Activity | Data Architecture | Data Platform | Data Governance | Federated team | Design forum (DWG) |
 |---|---|---|---|---|---|
 | Own the pattern catalogue & standards | **A/R** | C | C | I | C |
 | Build & maintain reusable assets (notebooks, pipelines, IaC, gateway) | C | **A/R** | C | I | I |
