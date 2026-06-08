@@ -6,14 +6,14 @@
 
 Load scheduled source files into the Bronze/raw layer in a controlled, auditable and repeatable way.
 
-### Solution Architect view
+#### Solution Architect view
 
-The source provides files on an agreed schedule. The platform lands each file in Bronze, captures operational metadata, validates basic file-level expectations and records the outcome. The data is not yet trusted or conformed; it is a controlled raw copy for downstream processing.
+The source system or external client pushes the file payload directly to the platform's RESTful Ingestion API. The API validates credentials, verifies the payload against the central Schema Registry, scans the contents, and streams the data directly to the Bronze layer. This ensures that no raw data lands in the lake without passing security and schema checks.
 
 ### Typical composition
 
 ```text
-A1 File to Bronze
+A1 File to Bronze (via Ingestion API)
 → B1 Bronze to Silver Standardisation
 → B3 Data Quality Validation and Quarantine
 → D1 Purview Registration
@@ -23,20 +23,21 @@ A1 File to Bronze
 
 ### Low-level Fabric mapping
 
-- Fabric pipeline to detect and copy files.
-- Bronze Lakehouse folder/table structure.
-- Metadata table for source name, file name, load time, row count, status and checksum where appropriate.
-- Notebook or pipeline activity for file validation.
-- Error/quarantine location for rejected files.
-- Monitoring dashboard/alert for late or failed files.
+- HTTP POST request targeting the platform's RESTful Ingestion API gateway.
+- API authentication using OAuth2 or secure API keys.
+- Gateway schema validation utilizing the central Schema Registry.
+- Ingestion API backend streaming payloads directly to Bronze Lakehouse storage.
+- API-level metadata logging (payload size, file hash, upload timestamp).
+- Quarantine storage for payloads rejected by the gateway.
+- Gateway logging and telemetry dashboard.
 
 ### Governance mapping
 
-- Data Owner and Data Steward identified before ingestion.
-- Source data contract documented.
-- Classification recorded.
-- Purview asset created for Bronze source dataset.
-- Lineage starts from source file location.
+- Data Owner and Data Steward identified and configured in the Schema Registry before ingestion.
+- Source data contract versioned and registered.
+- Data classification recorded.
+- Purview asset created for Bronze destination dataset.
+- Lineage starts at the Ingestion API gateway entry point.
 
 ### Example configuration
 
@@ -107,11 +108,11 @@ audit_logging: true
 
 ---
 
-## Example 3: C2 - Gold Dimensional Model
+## Example 3: C2 - Gold Star Schema Model
 
 ### Intent
 
-Create a trusted dimensional model for reporting and analytics.
+Create a classic conformed dimensional model (Star Schema) consisting of flat dimensions and facts to support strategic reporting.
 
 ### Solution Architect view
 
@@ -122,8 +123,8 @@ This pattern is used when data needs to support repeatable reporting and analyti
 ```text
 B2 Silver Conformance to EDM / Domain Model
 → B6 Slowly Changing Dimension Handling
-→ C2 Gold Dimensional Model
-→ C4 Semantic Model / Power BI Dataset
+→ C2 Gold Star Schema Model
+→ C6 Semantic Model / Power BI Dataset
 → D1 Purview Registration
 → E4 SLA / Freshness Tracking
 ```
@@ -231,7 +232,7 @@ For important datasets, it is not enough that the pipeline succeeds technically.
 ```text
 A3 Database Table to Bronze
 → B1 Bronze to Silver Standardisation
-→ C2 Gold Dimensional Model
+→ C2 Gold Star Schema Model
 → E2 Reconciliation
 → E1 Monitoring and Alerting
 ```

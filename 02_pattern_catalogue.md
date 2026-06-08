@@ -346,27 +346,80 @@ Publish reusable, curated Silver data for multiple downstream uses.
 
 ---
 
-## C2. Gold Dimensional Model
+## C2. Gold Star Schema Model
 
 ### Purpose
-Create a dimensional model for trusted reporting and analytics.
+Create a classic dimensional model (Star Schema) consisting of a central fact table joined to flat, denormalized dimension tables to support high-performance business intelligence and reporting.
 
 ### Typical use cases
-- Star schema.
-- Fact and dimension model.
-- Conformed dimensions.
-- Strategic or operational reporting layer.
+- Enterprise business intelligence dashboards.
+- Aggregated financial, sales, or student metrics reporting.
+- Standard cross-domain analysis where dimensions are shared (conformed dimensions).
+
+### Key design questions
+- Are the dimension tables fully denormalized (flat) to maximize query performance?
+- What are the Slowly Changing Dimension (SCD) requirements for each dimension?
+- How are surrogate keys or business keys managed to support Direct Lake mode?
+- How is referential integrity assured between the fact and dimension tables?
 
 ### Expected low-level mapping
-- Fabric Warehouse or Lakehouse tables.
-- Fact/dimension model.
-- SCD handling where required.
-- Semantic model alignment.
-- Reconciliation and performance checks.
+- Fabric Warehouse or Lakehouse tables structured as Facts and Dimensions.
+- Star schema relationship joins configured in the semantic model.
+- Slowly Changing Dimension (SCD Type 1/2) processing logic.
+- Automated surrogate key or composite business key generation.
+- Integrity checks and reconciliation counts (fact rows vs. dimension keys).
 
 ---
 
-## C3. Gold Flat Operational Reporting Model
+## C3. Gold Snowflake Schema Model
+
+### Purpose
+Create a normalized dimensional model (Snowflake Schema) where large or hierarchical dimensions are split into sub-dimensions to reduce redundancy and support complex hierarchical analysis.
+
+### Typical use cases
+- Hierarchical dimensions with deep branching structures (e.g., Product -> Subcategory -> Category, or organizational charts).
+- Very wide dimensions where normalizing secondary attributes improves overall storage efficiency.
+- Reusing standardized sub-dimensions across multiple separate dimensional models.
+
+### Key design questions
+- Does the normalization of dimensions introduce a query performance bottleneck for end-users?
+- Are views or cached semantic models used to abstract the snowflake joins from the reporting layer?
+- How are parent-child updates coordinated across sub-dimensions?
+
+### Expected low-level mapping
+- Parent and child dimension tables joined via relational foreign keys.
+- Normalized tables in Fabric Lakehouse/Warehouse.
+- Relational integrity rules and database views to simplify semantic layer consumption.
+- Multi-step notebook orchestration to update sub-dimensions sequentially.
+
+---
+
+## C4. Gold Big Data / Denormalized Model (One Big Table / OBT)
+
+### Purpose
+Create a fully denormalized, single-table model (One Big Table / OBT) or specialized distributed schema (e.g., Data Vault 2.0 Hub/Link/Satellite) optimized for petabyte-scale analytics, streaming datasets, and machine learning feature stores.
+
+### Typical use cases
+- High-velocity event streams, IoT feeds, and web clickstream data.
+- Machine learning feature stores requiring quick scan times across massive columns.
+- Server/system log analysis where star-schema joins are too expensive to execute.
+- Raw history archival with high-concurrency read demands.
+
+### Key design questions
+- What is the partition key strategy to ensure partition pruning works efficiently?
+- Are Z-Ordering, V-Order, or liquid clustering strategies configured to speed up analytical scans?
+- Is the table structure optimized for row-level updates (Delta merge) or is it append-only?
+
+### Expected low-level mapping
+- Delta Parquet tables in Fabric Lakehouse optimized with V-Order.
+- Liquid clustering or Z-Ordering applied to high-cardinality search columns.
+- Table partitioning based on date or high-frequency query boundaries.
+- Spark SQL or PySpark notebooks utilizing broadcast joins where applicable.
+- Integration with Delta Lake feature store APIs.
+
+---
+
+## C5. Gold Flat Operational Reporting Model
 
 ### Purpose
 Create a flattened reporting model for operational reporting where dimensional modelling is not appropriate or not yet required.
@@ -386,7 +439,7 @@ Create a flattened reporting model for operational reporting where dimensional m
 
 ---
 
-## C4. Semantic Model / Power BI Dataset
+## C6. Semantic Model / Power BI Dataset
 
 ### Purpose
 Publish a governed semantic model for Power BI reporting.
@@ -407,7 +460,7 @@ Publish a governed semantic model for Power BI reporting.
 
 ---
 
-## C5. Direct Lake Reporting Pattern
+## C7. Direct Lake Reporting Pattern
 
 ### Purpose
 Use Direct Lake to provide Power BI access to Fabric data with reduced duplication and improved performance.
@@ -427,7 +480,7 @@ Use Direct Lake to provide Power BI access to Fabric data with reduced duplicati
 
 ---
 
-## C6. Data Extract Publication Pattern
+## C8. Data Extract Publication Pattern
 
 ### Purpose
 Publish controlled extracts to downstream consumers.

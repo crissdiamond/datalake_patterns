@@ -35,27 +35,31 @@ Centrally managed notebooks, pipelines, libraries, Terraform/IaC and configurati
 Pattern:
 
 ```text
-A1 File to Bronze
+A1 File to Bronze (via Ingestion API)
 ```
 
 Possible molecules:
 
 ```text
-Receive File
-Validate File Presence
-Capture Source Metadata
-Land Raw Data
-Validate Schema
-Log Pipeline Run
-Quarantine Failed File
-Register Bronze Asset
-Send Failure Alert
+Client-Side/Source Actions:
+- Read Local Source File
+- Authenticate with Ingestion API
+- POST File Payload to API
+
+API-Side/Gateway Actions:
+- Authorize Ingestion Request
+- Validate Payload Schema against Registry
+- Virus Scan Payload
+- Stream Payload to Bronze
+- Log Gateway Ingestion Event
+- Quarantine Invalid Ingestion Payload
+- Send Ingestion Failure Alert
 ```
 
 Pattern:
 
 ```text
-C2 Gold Dimensional Model
+C2 Gold Star Schema Model
 ```
 
 Possible molecules:
@@ -75,15 +79,25 @@ Register Data Product
 
 Molecules should be grouped underneath the pattern catalogue, for example:
 
-### Source and ingestion molecules
+### Client-Side Ingestion Molecules (Source systems & agents)
 
-- Receive file
-- Call API
-- Extract database table
-- Read event stream
-- Capture source metadata
-- Validate source contract
-- Land raw data
+- Read source file
+- Extract source database table
+- Pull from source API
+- Batch source records
+- Authenticate with Ingestion API
+- HTTP POST payload to Ingestion API
+
+### API-Side Ingestion Molecules (Ingestion Gateway)
+
+- Authorize API client request
+- Retrieve active schema contract from Registry
+- Validate payload schema
+- Virus/malware scan payload
+- Write payload stream to Bronze folder
+- Log gateway audit telemetry
+- Quarantine rejected payload
+- Route event payload to stream processor
 
 ### Transformation molecules
 

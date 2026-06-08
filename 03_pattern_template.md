@@ -54,7 +54,7 @@ Example:
 A1 File to Bronze
 → B1 Bronze to Silver Standardisation
 → B3 Data Quality Validation and Quarantine
-→ C2 Gold Dimensional Model
+→ C2 Gold Star Schema Model
 → D1 Purview Registration
 → E1 Monitoring and Alerting
 ```

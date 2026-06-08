@@ -61,7 +61,7 @@ A Solution Architect should be able to select and combine patterns such as:
 Database Table to Bronze
 → Bronze to Silver Standardisation
 → Silver Conformance to Domain Model
-→ Gold Dimensional Model
+→ Gold Star Schema Model
 → Semantic Model / Power BI Dataset
 → Purview Registration
 → Monitoring and Alerting
