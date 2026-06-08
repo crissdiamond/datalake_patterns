@@ -27,41 +27,45 @@ Each pattern should eventually have:
 
 # A. Ingestion patterns
 
-Ingestion patterns define how source data enters the Data Lake / Fabric platform and becomes available in the Bronze/raw layer.
+Ingestion patterns define how source data enters the Data Lake / Fabric platform and becomes available in the Bronze/raw layer. 
+
+**Standardized Ingestion Gateway**: To enforce consistent security, auditability, metadata logging, and schema enforcement, all ingestion workloads enter the platform through a single unified entry point: a secure, platform-exposed RESTful Ingestion API. Whether data is pushed directly by the source system or pulled by an orchestrator/extraction agent, the final step in any ingestion pattern is a POST call to this Ingestion API, which then writes the validated payload to the Bronze layer.
+
+---
 
 ## A1. File to Bronze
 
 ### Purpose
-Load files from a source system, external partner, or controlled location into the Bronze/raw layer.
+Load files from a source system, external partner, or controlled location into the Bronze/raw layer via the RESTful Ingestion API.
 
 ### Typical use cases
 - Scheduled CSV, Excel, JSON, XML or Parquet extracts.
 - External partner or third-party files.
 - Legacy system exports.
-- Reporting migration where existing extracts are used as an interim source.
+- File-based reporting migration extracts.
 
 ### Key design questions
-- Is the file pushed or pulled?
+- Does the source system push the file directly to the RESTful Ingestion API, or does a file-watcher/extraction agent pull and forward it?
+- How is the file payload chunked/streamed when posting to the API?
 - Is the file full load, delta or incremental?
-- Is there a naming convention and delivery schedule?
-- Does the file include sensitive data?
-- What happens if the file is late, malformed or duplicated?
+- What happens if the API call fails or is rate-limited?
+- Does the file include sensitive data requiring payload-level encryption?
 
 ### Expected low-level mapping
-- Fabric Data Pipeline or Data Factory pipeline.
-- Bronze Lakehouse storage.
-- Metadata capture table.
-- Schema capture and validation.
-- Audit and lineage logging.
-- Error/quarantine area.
-- Alerting for missing or failed files.
+- Source or extraction agent making HTTP POST requests to the platform's RESTful Ingestion API.
+- API gateway authentication and authorization (e.g., OAuth2 / API keys).
+- Ingestion API handler writing the file stream to Bronze Lakehouse storage.
+- Metadata capture (file name, size, hash, load time) logged by the API.
+- Schema capture and validation at the API gateway.
+- API error response handling and client-side retry logic.
+- Audit, lineage, and alerting for missing or failed file pushes.
 
 ---
 
 ## A2. API to Bronze
 
 ### Purpose
-Ingest data from an API into the Bronze/raw layer.
+Ingest data from a source API into the Bronze/raw layer by routing it through the platform's RESTful Ingestion API.
 
 ### Typical use cases
 - SaaS platform API extraction.
@@ -70,56 +74,52 @@ Ingest data from an API into the Bronze/raw layer.
 - Scheduled API pulls for reporting/analytics.
 
 ### Key design questions
-- Is the API synchronous or asynchronous?
-- Is pagination required?
-- Is there rate limiting?
-- Is authentication standardised?
-- Is the source payload stable and versioned?
-- How are failed calls retried?
+- Does the source system call our RESTful Ingestion API directly (push model), or does an orchestration process fetch the source API and forward the payload to our Ingestion API (pull model)?
+- Is pagination, rate-limiting, or filtering handled at the source fetch layer before sending to our API?
+- How are authentication secrets managed for both the source API and our Ingestion API?
+- How are failed source API calls or destination Ingestion API calls retried?
 
 ### Expected low-level mapping
-- Fabric pipeline or notebook-based API extraction.
-- Secret management.
+- Ingestion orchestrator (Fabric Pipeline/Notebook) or direct source push calling the platform's RESTful Ingestion API.
+- Secret management (Azure Key Vault / Fabric Credentials) for API tokens.
 - Parameterised endpoint configuration.
-- Pagination/retry framework.
-- Raw response storage.
-- Metadata, audit and error logging.
+- Client-side pagination and batching before posting to the Ingestion API.
+- Gateway logging of API metadata, client IP, payload size, and timestamp.
+- Raw payload storage in Bronze Lakehouse via the Ingestion API backend.
 
 ---
 
 ## A3. Database Table to Bronze
 
 ### Purpose
-Ingest one or more database tables into Bronze.
+Ingest one or more database tables into Bronze by forwarding table extracts through the RESTful Ingestion API.
 
 ### Typical use cases
 - Operational reporting source extraction.
 - Data migration from legacy reporting stores.
 - Controlled source system replication.
-- Incremental loads using watermark columns.
+- Incremental database loads using watermark columns.
 
 ### Key design questions
-- Is the load full, incremental or CDC?
-- What is the extraction frequency?
-- Is the source system operationally sensitive?
-- What is the query/load impact?
-- What is the agreed data contract?
+- How is the database extractor configured to batch records and POST them to the RESTful Ingestion API?
+- Is the load full, incremental, or CDC (Change Data Capture)?
+- What is the extraction frequency and its query/load impact on the source database?
+- How is schema drift in the source database detected and handled at the Ingestion API?
 
 ### Expected low-level mapping
-- Fabric Data Pipeline / Data Factory connector.
-- Watermark configuration.
-- Source query template.
-- Bronze landing table/files.
-- Load audit table.
-- Reconciliation counts.
-- Error and retry handling.
+- Database extraction agent or pipeline pulling records and posting JSON/Parquet batches to the RESTful Ingestion API.
+- Watermark or replication state configuration.
+- Source query templates.
+- API-driven validation of table schemas.
+- Ingestion API backend writing records as Delta files in Bronze landing tables.
+- API-level logging of row counts and reconciliation metrics.
 
 ---
 
 ## A4. Event Stream to Bronze
 
 ### Purpose
-Ingest streaming or event-based data into the lake.
+Ingest streaming or event-based data into the lake via the RESTful Ingestion API.
 
 ### Typical use cases
 - Near-real-time operational events.
@@ -128,54 +128,51 @@ Ingest streaming or event-based data into the lake.
 - High-frequency telemetry or activity streams.
 
 ### Key design questions
-- Is real-time needed, or would scheduled ingestion suffice?
-- What event schema is used?
-- Is ordering important?
-- Are duplicate events possible?
-- What is the retention and replay model?
+- Can the event producer post events directly to the RESTful Ingestion API, or is an event hub / broker used as an intermediary?
+- How does the Ingestion API handle high-frequency streaming concurrency and rate limits?
+- Are duplicate events handled at the API gateway or downstream in Bronze?
+- What event schema (e.g., CloudEvents) is enforced by the Ingestion API?
 
 ### Expected low-level mapping
-- Event stream / Event Hub / Fabric Real-Time Intelligence, as appropriate.
-- Raw event capture.
-- Schema validation.
-- Deduplication approach.
-- Replay handling.
-- Monitoring and lag alerting.
+- Event producer or broker router publishing event payloads to the platform's RESTful Ingestion API endpoint.
+- API gateway rate limiting, throttling, and request buffering/queuing.
+- Real-time schema validation by the API.
+- Ingestion API backend writing streaming payloads to Bronze append-only tables.
+- Lag monitoring and webhook-based alerting.
 
 ---
 
 ## A5. Manual Upload to Governed Landing Area
 
 ### Purpose
-Allow authorised users to upload files into a governed landing area.
+Allow authorised users to upload files manually, routing the upload through the RESTful Ingestion API to ensure compliance and governance.
 
 ### Typical use cases
 - Controlled business uploads.
 - Small reference datasets.
-- Interim data collection before system integration exists.
-- Research/admin data where source system automation is not available.
+- Interim data collection before automated integration exists.
+- Research/admin data where automated source systems are unavailable.
 
 ### Key design questions
-- Who is authorised to upload?
-- Is upload temporary or strategic?
-- What validation is required before data enters Bronze?
-- What is the approval process?
-- How is misuse prevented?
+- Does the upload UI call the RESTful Ingestion API directly?
+- Who is authorised to trigger uploads, and how is identity verified at the API?
+- What payload size limits are enforced by the Ingestion API for manual uploads?
+- What automated file validation (malware scans, schema verification) runs on the API?
 
 ### Expected low-level mapping
-- Controlled landing workspace/location.
-- Access group and upload permissions.
-- File validation process.
-- Metadata capture.
-- Approval workflow where required.
-- Audit trail.
+- A secure web portal or UI client that uploads files via HTTP POST to the platform's RESTful Ingestion API.
+- User authentication linked to Active Directory / Identity Provider.
+- API-integrated file virus/malware scanning.
+- File schema and format validation by the API backend.
+- Metadata capture (uploader ID, upload time, original file name).
+- Target Bronze landing storage.
 
 ---
 
 ## A6. External Partner/Third-Party Extract to Bronze
 
 ### Purpose
-Ingest data provided by an external partner or third-party service into Bronze.
+Ingest data provided by an external partner or third-party service by exposing the RESTful Ingestion API as the secure entry point.
 
 ### Typical use cases
 - Managed service data extracts.
@@ -184,19 +181,19 @@ Ingest data provided by an external partner or third-party service into Bronze.
 - External benchmarking or enrichment data.
 
 ### Key design questions
-- What is the contractual delivery mechanism?
-- What is the agreed data contract?
-- What are the security and data protection constraints?
-- Who owns the external relationship?
-- What happens if extract format changes?
+- How does the external partner authenticate with the RESTful Ingestion API (e.g., dedicated API keys, OAuth clients)?
+- What is the agreed data contract and payload schema enforced by the API?
+- What are the IP whitelist or security constraints on the Ingestion API gateway?
+- Who owns the external relationship, and how are API contract changes managed?
 
 ### Expected low-level mapping
-- Secure transfer mechanism.
-- Landing and validation pipeline.
-- Data contract/schema validation.
-- Exception handling.
-- External change notification process.
-- Audit, lineage and support model.
+- External partner client pushing data payloads directly to the platform's RESTful Ingestion API.
+- Gateway IP filtering and Web Application Firewall (WAF) protections.
+- API key or Client Credentials flow authentication.
+- Data contract/schema validation at the API gateway.
+- Ingestion API backend writing payloads to Bronze partner folders.
+- External partner change notification and API versioning process.
+- Operational support logs and alerts.
 
 ---
 
