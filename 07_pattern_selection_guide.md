@@ -83,6 +83,7 @@ Several D controls are **enforced as gates** (see `06_cross_cutting_concerns.md`
 - **E4** SLA / Freshness — anything with a consumer expectation (especially C9).
 - **E5** Deployment & Promotion — all solutions.
 - **E6** Cost / Capacity — all workloads, especially C4/C7.
+- **E7** DQ Remediation & Resubmission — wherever records are quarantined (B3/B4/D7).
 
 ---
 

@@ -42,6 +42,8 @@ Each contract holds, per source/feed:
 
 The gateway validates every payload against the **active** contract version and rejects/quarantines violations. Contract changes are versioned and governed via D9. The registry is the single source of truth that lets ingestion be both federated and safe.
 
+Whether this is delivered by **wrapping existing tooling** (e.g. Purview, Azure Schema Registry) or a **purpose-built contract store** — and how runtime payload validation is separated from governance metadata — is a key build-vs-buy decision for the delivery partner (§7 and `09_supplier_engagement_brief.md`). The default is to adopt/wrap native capability unless bespoke build is justified.
+
 ---
 
 ## 3. Security and identity
@@ -82,6 +84,7 @@ Mechanisms:
 - contract validation at the Ingestion gateway (ingestion-time enforcement);
 - policy-as-code checks in the deployment pipeline (promotion-time enforcement);
 - automated Purview registration as a gate;
+- **capacity controls** (e.g. workspace compute quotas, CI/CD performance gates) so federated jobs cannot exhaust shared Fabric capacity — active enforcement, not the passive monitoring of E6 alone;
 - assurance review for Expected controls.
 
 Each pattern's section 10 must state which of its controls are Enforced vs Expected.

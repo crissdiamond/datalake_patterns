@@ -328,7 +328,7 @@ Governance patterns define how data is made trustworthy, understandable, owned a
 - **Intent.** Record, prioritise and track DQ issues discovered through patterns.
 - **When to use.** Wherever B3/B4 run.
 - **Key design questions.** Issue-log integration and severity/ownership? Link to failed rule output? Trend reporting?
-- **Typical composition.** B3/B4 → D7.
+- **Typical composition.** B3/B4 → D7 → E7.
 - **Leverage.** Reusable asset. **Status.** Draft.
 
 ### D8. Retention, Archival and Deletion
@@ -394,6 +394,15 @@ Operational patterns define how Data Lake solutions are run, monitored, recovere
 ### E6. Cost / Capacity Monitoring
 - **Intent.** Monitor and manage Fabric capacity and cost impact.
 - **When to use.** All workloads, especially C4/C7.
-- **Key design questions.** Capacity metrics and workload attribution? Cost/performance dashboard and threshold alerts? Efficient-design guidance?
+- **Key design questions.** Capacity metrics and workload attribution? Cost/performance dashboard and threshold alerts? **Active enforcement (workspace compute quotas, CI/CD performance gates) or passive monitoring only?** (See the enforcement model in `06_cross_cutting_concerns.md`.) Efficient-design guidance?
 - **Typical composition.** C4/C7 → E6.
+- **Leverage.** Reusable asset. **Status.** Draft.
+
+### E7. Data Quality Remediation & Resubmission
+- **Intent.** Close the loop on quarantined data — how Data Stewards review, remediate and re-submit records that failed quality checks, without bypassing validation.
+- **When to use.** Wherever B3/B4 quarantine records and D7 logs issues.
+- **When not to use.** Where failed records are discarded by agreed policy.
+- **Typical use cases.** Steward worklist for quarantined records; fix-at-source and re-ingest; documented accept-with-exception.
+- **Key design questions.** What steward actions are permitted (fix-at-source / correct-and-resubmit / accept-with-exception)? How does resubmitted data re-enter through the **same** validation rather than bypass it? How are changes and sign-offs audited? What remediation-rate and quarantine-age metrics are tracked?
+- **Typical composition.** B3/B4 → D7 → E7 → (re-ingest via A*).
 - **Leverage.** Reusable asset. **Status.** Draft.

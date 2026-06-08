@@ -16,6 +16,15 @@ We are **not** asking you to:
 - produce a large molecule catalogue in isolation (derive molecules per pattern — see `05_molecules_as_building_blocks.md`);
 - default to bespoke build where Fabric-native capability exists (justify build vs buy — `06_cross_cutting_concerns.md` §7).
 
+### Key decisions we need you to resolve
+
+These are deliberately left open for your expertise. We want your **recommendation with options and trade-offs**, not a pre-baked answer:
+
+- **Schema Registry — wrap vs build.** Whether to adopt/wrap existing tooling (e.g. Purview, Azure Schema Registry) or build a contract store, and how runtime payload validation is separated from governance metadata (owner/steward/classification/DQ). Default principle: adopt/wrap native unless bespoke is justified (`06` §7).
+- **Capacity enforcement.** How federated compute is *actively* governed — e.g. workspace compute quotas and CI/CD performance gates — rather than only passively monitored (E6). We want enforcement that protects shared capacity without killing federation velocity.
+- **EDM approach.** We intend an **incremental, bottom-up** domain model: conform domains only as the wave use cases require, with B2 applied only where a genuine cross-domain consumer exists — not a full top-down enterprise model up front. Confirm and shape this.
+- **DQ remediation (E7).** Define the standardised steward remediation and resubmission loop now added to the catalogue (E7).
+
 ---
 
 ## 2. Scope and priorities
@@ -26,7 +35,7 @@ Patterns will be completed in priority waves, not all at once.
 |---|---|---|
 | **P1** | A1, A3, B1, B3, C2, D1, E1, E2 + the Ingestion Gateway / Schema Registry detail | The most common end-to-end path; proves the framework. |
 | **P2** | A2, A4, A6, B2, B5, B6, C1, C5, C6, D3/D4/D5, E3, E5 | Broadens ingestion, modelling and governance. |
-| **P3** | A5, A7, B4, B7, C3, C4, C7, C8, C9, D2/D6/D7/D8/D9, E4, E6 | Specialist and lifecycle patterns. |
+| **P3** | A5, A7, B4, B7, C3, C4, C7, C8, C9, D2/D6/D7/D8/D9, E4, E6, E7 | Specialist and lifecycle patterns. |
 
 (Confirm the wave assignment with Data Architecture before starting — priorities may shift with demand.)
 

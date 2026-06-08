@@ -67,6 +67,8 @@ This keeps the catalogue growing from real demand while preventing fragmentation
 | **Governance enforcement tooling** | Without policy-as-code gates, embedded governance drifts. | Data Governance |
 | **Central team capacity** | Federation only stays safe if a central team curates and assures. | Data Architecture / Platform |
 
+**Intended EDM approach.** Incremental and bottom-up: conform domains only as the wave use cases require, with B2 applied where a cross-domain consumer exists; the domain model accretes from real patterns under steward curation rather than being modelled top-down up front. This is the direction we expect the delivery partner to confirm and shape (see `09_supplier_engagement_brief.md`).
+
 ---
 
 ## 6. Success metrics
