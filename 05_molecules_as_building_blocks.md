@@ -4,7 +4,7 @@
 
 This document clarifies the role of molecules.
 
-The primary ask to suppliers is the **Data Lake pattern catalogue**. Molecules are not the top-level catalogue; they are the reusable lower-level building blocks that allow patterns to be assembled and implemented consistently.
+Molecules are not the top-level catalogue; they are the reusable lower-level building blocks that allow patterns to be assembled and implemented consistently under the pattern catalogue.
 
 This mirrors the Integration approach:
 
@@ -124,13 +124,13 @@ Molecules should be grouped underneath the pattern catalogue, for example:
 - Promote between environments
 - Monitor capacity
 
-## 4. Supplier expectation
+## 4. Implementation expectation
 
-Suppliers should not start by producing a large molecule catalogue in isolation.
+Designers and developers should not start by producing a large molecule catalogue in isolation.
 
 They should start with the pattern catalogue and, for each priority pattern, identify the molecules required to implement it.
 
-For each selected molecule, the supplier should define:
+For each selected molecule, the framework should define:
 
 - purpose;
 - inputs and outputs;
@@ -146,4 +146,4 @@ For each selected molecule, the supplier should define:
 - **Molecule** = reusable implementation/design unit used inside one or more patterns.
 - **Reusable asset** = actual centrally managed code/template/configuration that implements a molecule.
 
-The supplier response should make this distinction clear.
+Any implementation or design using this framework should maintain this clear distinction.

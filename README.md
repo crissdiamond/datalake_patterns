@@ -1,10 +1,10 @@
-# Data Lake Pattern Catalogue Supplier Pack v2
+# Data Lake Pattern Catalogue and Framework
 
 ## Purpose
 
-This pack clarifies the ask for Deloitte and Simpson Associates.
+This document defines the approach for the patternisation of data lake design and operations, aiming to establish a standardized framework for architecture, development, and governance.
 
-The previous version over-emphasised the molecule catalogue. This version puts the **Data Lake pattern catalogue** first, aligned to the structure discussed:
+This framework organizes the **Data Lake pattern catalogue** into five core groups:
 
 1. Ingestion patterns
 2. Transformation patterns
@@ -40,12 +40,3 @@ The objective is to reproduce the successful Integration approach in the Data La
 
 5. `05_molecules_as_building_blocks.md`  
    Explains how molecules sit below patterns as reusable implementation units.
-
-6. `06_supplier_ask.md`  
-   Supplier-facing clarification of what Deloitte/Simpson should respond to.
-
-7. `07_supplier_response_template.md`  
-   Structured response template for suppliers.
-
-8. `08_cover_note.md`  
-   Draft email/note to send to suppliers.

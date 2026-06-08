@@ -42,12 +42,12 @@ A1 File to Bronze
 
 ```yaml
 pattern_id: A1
-source_name: supplier_hr_extract
+source_name: hr_extract
 source_type: file
 file_format: csv
 load_frequency: daily
 load_type: full
-landing_zone: bronze/hr/supplier_extract
+landing_zone: bronze/hr/extract
 schema_validation: true
 data_owner: "[Named owner]"
 data_steward: "[Named steward]"
@@ -97,9 +97,9 @@ A1 File to Bronze
 
 ```yaml
 pattern_id: B1
-source_table: bronze.hr_supplier_extract
-silver_table: silver.hr_supplier_standardised
-mapping_file: mappings/hr_supplier_to_silver.yaml
+source_table: bronze.hr_extract
+silver_table: silver.hr_standardised
+mapping_file: mappings/hr_to_silver.yaml
 standard_date_format: ISO-8601
 standard_null_handling: true
 audit_logging: true

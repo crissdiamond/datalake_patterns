@@ -36,7 +36,7 @@ Centrally managed notebooks, pipelines, templates, Terraform/IaC and configurati
 Standardised governed data product
 ```
 
-The ask is not simply to create technical documentation. The ask is to create an **architecture-to-implementation system** that enables safe federation.
+The goal is not simply to create technical documentation. The objective is to create an **architecture-to-implementation system** that enables safe federation.
 
 ## 2. Main goal
 
@@ -113,4 +113,4 @@ The Data Lake pattern catalogue should be structured into five layers:
 4. **Governance patterns** — how ownership, quality, lineage, glossary, classification and access are applied.
 5. **Operational patterns** — how solutions are monitored, reconciled, deployed, supported and controlled.
 
-These are the patterns to be defined by the supplier, with enough low-level mapping to make them implementable in Microsoft Fabric and Purview.
+These are the patterns defined by the framework, providing enough low-level mapping to make them implementable in Microsoft Fabric and Purview.

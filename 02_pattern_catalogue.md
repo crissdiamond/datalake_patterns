@@ -2,7 +2,7 @@
 
 ## 1. Purpose
 
-This is the main pattern catalogue that Deloitte and Simpson should respond to.
+This is the main pattern catalogue defining the standard architectural patterns for data lake design and operations.
 
 The catalogue is structured into five pattern groups:
 
@@ -32,11 +32,11 @@ Ingestion patterns define how source data enters the Data Lake / Fabric platform
 ## A1. File to Bronze
 
 ### Purpose
-Load files from a source system, supplier or controlled location into the Bronze/raw layer.
+Load files from a source system, external partner, or controlled location into the Bronze/raw layer.
 
 ### Typical use cases
 - Scheduled CSV, Excel, JSON, XML or Parquet extracts.
-- Supplier-provided files.
+- External partner or third-party files.
 - Legacy system exports.
 - Reporting migration where existing extracts are used as an interim source.
 
@@ -172,22 +172,22 @@ Allow authorised users to upload files into a governed landing area.
 
 ---
 
-## A6. External Vendor Extract to Bronze
+## A6. External Partner/Third-Party Extract to Bronze
 
 ### Purpose
-Ingest data provided by an external vendor into Bronze.
+Ingest data provided by an external partner or third-party service into Bronze.
 
 ### Typical use cases
 - Managed service data extracts.
 - Third-party application data.
-- Vendor-hosted operational systems.
+- External partner-hosted operational systems.
 - External benchmarking or enrichment data.
 
 ### Key design questions
 - What is the contractual delivery mechanism?
 - What is the agreed data contract?
 - What are the security and data protection constraints?
-- Who owns the vendor relationship?
+- Who owns the external relationship?
 - What happens if extract format changes?
 
 ### Expected low-level mapping
@@ -195,7 +195,7 @@ Ingest data provided by an external vendor into Bronze.
 - Landing and validation pipeline.
 - Data contract/schema validation.
 - Exception handling.
-- Supplier change notification process.
+- External change notification process.
 - Audit, lineage and support model.
 
 ---
@@ -274,7 +274,7 @@ Identify duplicate records and determine the preferred/surviving record.
 
 ### Typical use cases
 - Person/entity matching.
-- Supplier/customer/student duplicates.
+- Customer, student, or other business entity duplicates.
 - Multiple source consolidation.
 - Master/reference data preparation.
 
@@ -439,7 +439,7 @@ Publish controlled extracts to downstream consumers.
 - Regulatory/statutory extracts.
 - Data sharing with another platform.
 - Controlled operational extracts.
-- Supplier/partner data sharing.
+- External partner data sharing.
 
 ### Expected low-level mapping
 - Export pipeline.
