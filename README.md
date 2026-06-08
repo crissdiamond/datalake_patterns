@@ -1,35 +1,51 @@
-# Data Lake Patterns
+# Data Lake Pattern Catalogue Supplier Pack v2
 
 ## Purpose
 
-This repository contains documentation defining a reusable Data Lake / Microsoft Fabric pattern framework.
+This pack clarifies the ask for Deloitte and Simpson Associates.
 
-The intent is to replicate the successful architectural approach used for UCL's Integration Strategy, where:
+The previous version over-emphasised the molecule catalogue. This version puts the **Data Lake pattern catalogue** first, aligned to the structure discussed:
 
-- Solution Architects could safely design integration flows without needing deep integration engineering knowledge.
-- Developers could implement those flows using centrally governed reusable building blocks.
-- EASIKit standardised implementation through centrally managed Python libraries, Terraform modules and repeatable deployment assets.
+1. Ingestion patterns
+2. Transformation patterns
+3. Data product patterns
+4. Governance patterns
+5. Operational patterns
 
-The Data Lake equivalent should allow:
+The molecule concept is still useful, but it should sit underneath the pattern catalogue as the reusable building-block language, in the same way that Integration patterns were decomposed into lower-level molecules and then implemented through EASIKit, Python libraries and Terraform modules.
 
-- Solution Architects to safely design end-to-end data use cases.
-- Federated users and delivery teams to build safely using centrally managed Fabric/Purview building blocks.
-- Data Architecture to provide guardrails, design language, reusable patterns and assurance rather than becoming a bottleneck for every delivery.
+## Strategic intent
 
-## Files in this repository
+The objective is to reproduce the successful Integration approach in the Data Lake / Microsoft Fabric space:
 
-1. `01_data_lake_patterns_model.md`  
-   Describes the proposed Data Lake pattern model, based on the Integration pattern/molecule approach.
+- enable Solution Architects to safely design end-to-end data use cases without deep Fabric/data engineering expertise;
+- enable federated users and delivery teams to use centrally managed building blocks safely;
+- map high-level patterns to low-level Fabric/Purview implementation;
+- create reusable code/configuration assets rather than bespoke delivery every time;
+- embed governance, operations, ownership, lineage, quality and access into the patterns from the start.
 
-2. `03_data_lake_molecule_catalogue_draft.md`  
-   Draft catalogue of Data Lake molecules equivalent to the Integration molecule catalogue.
+## Documents
 
-3. `04_example_end_to_end_patterns.md`  
-   Example end-to-end Data Lake patterns showing how molecules combine into repeatable designs.
+1. `01_model_and_principles.md`  
+   Defines the overall Data Lake pattern model and how it maps from Integration.
 
-4. `05_delivery_plan_acceptance_criteria.md`  
-   Proposed delivery structure, outputs and acceptance criteria.
+2. `02_pattern_catalogue.md`  
+   Main document: the proposed pattern catalogue grouped into Ingestion, Transformation, Data Product, Governance and Operational patterns.
 
-## Core Goal
+3. `03_pattern_template.md`  
+   Standard template each pattern should follow.
 
-The goal is to create a reusable Data Lake pattern framework that turns complex Microsoft Fabric, Purview, data engineering, governance and operational practices into a safe design language for Solution Architects and a governed implementation framework for federated delivery teams.
+4. `04_example_patterns.md`  
+   Worked examples showing how selected patterns should be described.
+
+5. `05_molecules_as_building_blocks.md`  
+   Explains how molecules sit below patterns as reusable implementation units.
+
+6. `06_supplier_ask.md`  
+   Supplier-facing clarification of what Deloitte/Simpson should respond to.
+
+7. `07_supplier_response_template.md`  
+   Structured response template for suppliers.
+
+8. `08_cover_note.md`  
+   Draft email/note to send to suppliers.
